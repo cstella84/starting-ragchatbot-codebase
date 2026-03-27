@@ -137,10 +137,14 @@ function addMessage(content, type, sources = null, isWelcome = false) {
             // Shorten "Course Name - Lesson N" to just "Lesson N", keep full label as tooltip
             const lessonMatch = s.label.match(/Lesson\s+\d+$/i);
             const shortLabel = lessonMatch ? lessonMatch[0] : s.label;
+            // Sanitize values before injection
+            const safeUrl = escapeHtml(s.url || '');
+            const safeLabel = escapeHtml(s.label || '');
+            const safeShortLabel = escapeHtml(shortLabel);
             if (s.url) {
-                return `<a class="source-tag" href="${s.url}" target="_blank" rel="noopener noreferrer" title="${s.label}"><span class="source-tag-icon">▶</span>${shortLabel}</a>`;
+                return `<a class="source-tag" href="${safeUrl}" target="_blank" rel="noopener noreferrer" title="${safeLabel}"><span class="source-tag-icon">▶</span>${safeShortLabel}</a>`;
             }
-            return `<span class="source-tag" title="${s.label}">${shortLabel}</span>`;
+            return `<span class="source-tag" title="${safeLabel}">${safeShortLabel}</span>`;
         }).join('');
         html += `
             <details class="sources-collapsible">
