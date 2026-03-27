@@ -92,8 +92,11 @@ async def get_course_stats():
 @app.post("/api/session/clear")
 async def clear_session(request: ClearSessionRequest):
     """Clear conversation history for a session"""
-    rag_system.session_manager.clear_session(request.session_id)
-    return {"success": True}
+    try:
+        rag_system.session_manager.clear_session(request.session_id)
+        return {"success": True}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.on_event("startup")
 async def startup_event():
