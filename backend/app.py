@@ -43,13 +43,17 @@ class QueryRequest(BaseModel):
 class QueryResponse(BaseModel):
     """Response model for course queries"""
     answer: str
-    sources: List[str]
+    sources: List[dict]
     session_id: str
 
 class CourseStats(BaseModel):
     """Response model for course statistics"""
     total_courses: int
     course_titles: List[str]
+
+class ClearSessionRequest(BaseModel):
+    """Request model for clearing a session"""
+    session_id: str
 
 # API Endpoints
 
@@ -84,6 +88,12 @@ async def get_course_stats():
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/session/clear")
+async def clear_session(request: ClearSessionRequest):
+    """Clear conversation history for a session"""
+    rag_system.session_manager.clear_session(request.session_id)
+    return {"success": True}
 
 @app.on_event("startup")
 async def startup_event():
