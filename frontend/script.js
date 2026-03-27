@@ -28,8 +28,20 @@ function setupEventListeners() {
     chatInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendMessage();
     });
-    
-    
+
+    // New chat button
+    document.getElementById('newChatBtn').addEventListener('click', () => {
+        if (currentSessionId) {
+            fetch(`${API_URL}/session/clear`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ session_id: currentSessionId })
+            });
+        }
+        currentSessionId = null;
+        createNewSession();
+    });
+
     // Suggested questions
     document.querySelectorAll('.suggested-item').forEach(button => {
         button.addEventListener('click', (e) => {
@@ -122,10 +134,19 @@ function addMessage(content, type, sources = null, isWelcome = false) {
     let html = `<div class="message-content">${displayContent}</div>`;
     
     if (sources && sources.length > 0) {
+        const sourceItems = sources.map(s => {
+            // Shorten "Course Name - Lesson N" to just "Lesson N", keep full label as tooltip
+            const lessonMatch = s.label.match(/Lesson\s+\d+$/i);
+            const shortLabel = lessonMatch ? lessonMatch[0] : s.label;
+            if (s.url) {
+                return `<a class="source-tag" href="${s.url}" target="_blank" rel="noopener noreferrer" title="${s.label}"><span class="source-tag-icon">▶</span>${shortLabel}</a>`;
+            }
+            return `<span class="source-tag" title="${s.label}">${shortLabel}</span>`;
+        }).join('');
         html += `
             <details class="sources-collapsible">
                 <summary class="sources-header">Sources</summary>
-                <div class="sources-content">${sources.join(', ')}</div>
+                <div class="sources-content">${sourceItems}</div>
             </details>
         `;
     }
