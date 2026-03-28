@@ -24,6 +24,143 @@
     --welcome-border: #2563eb;
 }
 
+/* Light Theme Overrides */
+[data-theme="light"] {
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --surface-hover: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --border-color: #e2e8f0;
+    --user-message: #2563eb;
+    --assistant-message: #f1f5f9;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --welcome-bg: #eff6ff;
+    --welcome-border: #2563eb;
+    --focus-ring: rgba(37, 99, 235, 0.15);
+}
+
+/* Light theme: fix hardcoded dark colors and improve accessibility */
+
+/* Source tags */
+[data-theme="light"] .source-tag {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    color: #1d4ed8;
+}
+
+[data-theme="light"] .source-tag:hover {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+/* Code blocks */
+[data-theme="light"] .message-content code,
+[data-theme="light"] .message-content pre {
+    background-color: rgba(0, 0, 0, 0.06);
+}
+
+/* Assistant message bubbles — differentiate from page background (#ffffff → #f1f5f9) */
+[data-theme="light"] .message.assistant .message-content {
+    background: var(--assistant-message);
+}
+
+/* Welcome message */
+[data-theme="light"] .message.welcome-message .message-content {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Error/success — dark text for WCAG AA compliance on light backgrounds */
+[data-theme="light"] .error-message {
+    background: rgba(239, 68, 68, 0.08);
+    color: #b91c1c;
+    border-color: rgba(239, 68, 68, 0.25);
+}
+
+[data-theme="light"] .success-message {
+    background: rgba(34, 197, 94, 0.08);
+    color: #15803d;
+    border-color: rgba(34, 197, 94, 0.25);
+}
+
+/* Smooth theme transitions */
+body,
+.sidebar,
+.chat-main,
+.chat-container,
+.chat-messages,
+.chat-input-container,
+#chatInput,
+.message-content,
+.stat-item,
+.suggested-item,
+.source-tag,
+.theme-toggle,
+.error-message,
+.success-message,
+#sendButton {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    top: 0.75rem;
+    right: 1rem;
+    z-index: 100;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.theme-toggle:hover {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    background: var(--surface-hover);
+}
+
+.theme-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring);
+    border-color: var(--primary-color);
+}
+
+.theme-toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Dark mode active: show sun (click to go light) */
+.theme-toggle .icon-sun {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+.theme-toggle .icon-moon {
+    opacity: 0;
+    transform: rotate(-90deg);
+}
+
+/* Light mode active: show moon (click to go dark) */
+[data-theme="light"] .theme-toggle .icon-sun {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+[data-theme="light"] .theme-toggle .icon-moon {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
 /* Base Styles */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
